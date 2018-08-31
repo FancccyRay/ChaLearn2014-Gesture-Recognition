@@ -1,7 +1,7 @@
 # ChaLearn2014-Gesture-Recognition
 Take 3DCNN and DBN as sub-networks, merge two networks using late fusion algorithm
 
-You can conduct the file as the following order,the you can get the training result of DBN/3DCNN/
+You can conduct the file as the following order,then you can get the training result of DBN/3DCNN/
 Multi-model network.
 
 1step 1:Step_1_preprocess.py 

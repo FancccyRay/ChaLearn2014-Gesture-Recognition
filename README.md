@@ -1,4 +1,6 @@
-# ChaLearn2014-Gesture-Recognition
+# The project is copied from https://github.com/stevenwudi/chalearn2014_wudi_lio 
+# I met some questions when running the project, so I made some adjustment here
+## ChaLearn2014-Gesture-Recognition
 Take 3DCNN and DBN as sub-networks, merge two networks using late fusion algorithm
 
 You can conduct the file as the following order,then you can get the training result of DBN/3DCNN/

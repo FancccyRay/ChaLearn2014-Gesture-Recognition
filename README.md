@@ -26,9 +26,9 @@ save as hdf5 file to read more easily
 Step 3: Step_3_DBN_training.py
 --------
 (vedio classifier) construct a GDBN networkas and train it to test its classification quality
-(train this network twice)        
-（1）¢pretrain the network and update parameters   
-(2)¢load the pretrained parameters and finetune the network
+(train this network twice)    
+（1）pretrain the network and update parameters   
+(2)load the pretrained parameters and finetune the network
 
 Step 4: Step_4_3DCNN_training.py
 ----

@@ -47,6 +47,7 @@ NEUTRUAL_SEG_LENGTH = 8
 # number of hidden states for each gesture class
 HIDDEN_STATE = 5
 
+prog_start_time = 0
 def main():
     prog_start_time = time()
     os.chdir(data)
@@ -54,7 +55,7 @@ def main():
     print len(samples), "samples found"
     #start preprocessing
     preprocess(samples)
-    print"whole programe time used: %3.3f h"%((time()-prog_start_time)/3600.)
+#    print"whole programe time used: %3.3f h"%((time()- prog_start_time)/3600.)
 
 def preprocess(samples):
     for file_count, file in enumerate(sort(samples)):
@@ -120,11 +121,25 @@ def preprocess(samples):
             print "gray.shape[1]=" , gray.shape[1]
             
             ##we just use gray and depth videos for training
-            video = empty((2,) + gray.shape, dtype = "uint8")
-            print "video.shape = " , video.shape
-            
+            video = empty((2,) + gray.shape, dtype = "uint8")   
             video[0], video[1] = gray, depth
+            store_preproc_video_skelet_data(video, skelet_feature, Targets.argmax(axis = 1), skelet, dest)
+            print "finished"
             
+        end_time = time()
+            
+        print "Processing one batch requires : %d seconds\n" %(end_time - start_time)
+        if file_count == len(samples) - 1:
+            dump_last_data(video, skelet_feature, Targets.argmax(axis = 1), skelet, dest)
+        if file_count == 361 - 1:
+            dump_last_data(video, skelet_feature, Targets.argmax(axis = 1), skelet, dest)
+            
+        print" Processing one sample requies: %3.3f h" %((time()- prog_start_time)/3600.)
+        
+        
+    
+    
+    
 
 vid, skel_fea, labl, skel = [], [], [], [] 
 count = 1, batch_idx = 0
@@ -142,11 +157,48 @@ def store_preproc_video_skelet_data(video, skelet_feature, label, skelet, dest_p
         labl = concatenate((labl,label))
         skel.append(skelet)
 
-    if len(l) > 1000:
+    if len(labl) > 1000:
         make_sure_path_exists(dest_path)
         os.chdir(dest_path)
+        file_name = "batch__" + str(batch_idx) + "_" + str(len(labl)) + ".zip"
+        file = gzip.GzipFile(file_name, 'wb')
+        dump((vid, skel_fea, labl, skel), file, -1)
+        file.close()
+        
+        print file_name
+        batch_idx += 1
+        count = 1
+        vid, skel_fea, labl, skel = [], [], [], [] 
+    
+    count += 1
         
             
+def dump_last_data(video, skelet_feature, label, skelet, dest_path):
+    vid = concatenate((vid,video), axis = 2)
+    skel_fea = concatenate((skel_fea,skelet_feature), axis = 0)
+    labl = concatenate((labl, label))
+    skel.append(skelet)
+    os.chdir(dest_path)
+    file_name = "batch+" + str(batch_idx) + "_" + str(len(labl)) + ".zip"
+    file = gzip.GzipFile(file_name, 'wb')
+    dump((vid, skel_fea, labl, skel), file, -1)
+    file.close()
+    
+    print file_name
+    
+
+if __name__ == '__main__':
+    main()
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
             
                 
                 

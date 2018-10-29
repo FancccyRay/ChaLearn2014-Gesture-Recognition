@@ -6,7 +6,6 @@ Created on Thu Jun 14 17:42:00 2018
 @author: fancy
 """
 
-
 import cv2
 import os
 import sys
@@ -59,6 +58,7 @@ def main():
 
 def preprocess(samples):
     for file_count, file in enumerate(sort(samples)):
+        print "This is the %d th file : " %file_count
         ##totally 400 training samples, use 36 for training, 40 for validating
         if file_count < 361:
             if pc == "linux_fancy" :
@@ -73,16 +73,16 @@ def preprocess(samples):
             elif pc == "win_fancy" :
                 dest =""
             print "\t Processing validating file " + file
-            
+        
         start_time = time()
 	    ##Create the object to access the sample
         sample = GestureSample(os.path.join(data, file))
-	    #print(os.path.join(data, file))
+#        print(os.path.join(data, file))
     
         ##USE Ground Truth information to learn the model
         ##Get the list of gesture for this sample
         gestures = sample.getGestures()
-	    print(len(gestures))
+        print "len(gestures" + str(len(gestures))
         # preprocess each gesture 
         for gesture in gestures:
             skelet, depth, gray, user, c = sample.get_data_wudi(gesture, vid_res, NEUTRUAL_SEG_LENGTH)
@@ -108,13 +108,13 @@ def preprocess(samples):
             if show_user: play_vid_wudi(user_new, Targets, wait=1000 / 10, norm=False)
             
             traj2D, traj3D, ori, pheight, hand, center = skelet
-            print len(skelet),skelet
+#            print len(skelet),skelet
             skelet = traj3D, ori, pheight
-            print len(skelet),skelet
+#            print len(skelet),skelet
             
             assert user.dtype == gray.dtype == depth.dtype == traj3D.dtype == ori.dtype == "uint8"
             assert gray.shape == depth.shape
-            print "gray.shape=" , gray.shape
+#            print "gray.shape=" , gray.shape
             
             if not gray.shape[1] == skelet_feature.shape[0] == Targets.shape[0]:
                 print "too early or too late movement, skip one"
@@ -126,9 +126,7 @@ def preprocess(samples):
             store_preproc_video_skelet_data(video, skelet_feature, Targets.argmax(axis = 1), skelet, dest)
             print "finished"
             
-        end_time = time()
-            
-        print "Processing one batch requires : %d seconds\n" %(end_time - start_time)
+        print "Processing one batch requires : %d seconds\n" %(time() - start_time)
         if file_count == len(samples) - 1:
             dump_last_data(video, skelet_feature, Targets.argmax(axis = 1), skelet, dest)
         if file_count == 361 - 1:
@@ -142,10 +140,10 @@ def preprocess(samples):
     
 
 vid, skel_fea, labl, skel = [], [], [], [] 
-count = 1, batch_idx = 0
+count = 1
+batch_idx = 0
 def store_preproc_video_skelet_data(video, skelet_feature, label, skelet, dest_path):
-#    global vid, skel_fea, lab, skel = [], [], [], [] 
-#    global count = 1, batch_idx = 0
+    global vid, skel_fea, labl, skel, count, batch_idx
     if len(vid) == 0:
         vid = video
         skel_fea = skelet_feature 
@@ -174,6 +172,7 @@ def store_preproc_video_skelet_data(video, skelet_feature, label, skelet, dest_p
         
             
 def dump_last_data(video, skelet_feature, label, skelet, dest_path):
+    global vid, skel_fea, labl, skel, count, batch_idx
     vid = concatenate((vid,video), axis = 2)
     skel_fea = concatenate((skel_fea,skelet_feature), axis = 0)
     labl = concatenate((labl, label))

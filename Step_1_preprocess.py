@@ -109,14 +109,10 @@ def preprocess(samples):
             if show_user: play_vid_wudi(user_new, Targets, wait=1000 / 10, norm=False)
             
             traj2D, traj3D, ori, pheight, hand, center = skelet
-#            print len(skelet),skelet
             skelet = traj3D, ori, pheight
-#            print len(skelet),skelet
             
             assert user.dtype == gray.dtype == depth.dtype == traj3D.dtype == ori.dtype == "uint8"
-            assert gray.shape == depth.shape
-#            print "gray.shape=" , gray.shape
-            
+            assert gray.shape == depth.shape            
             if not gray.shape[1] == skelet_feature.shape[0] == Targets.shape[0]:
                 print "too early or too late movement, skip one"
             
@@ -125,21 +121,16 @@ def preprocess(samples):
             video[0], video[1] = gray, depth
             store_preproc_video_skelet_data(video, skelet_feature, Targets.argmax(axis = 1), skelet, dest)
             print "finished"
-            
+         
         print "Processing one batch requires : %d seconds\n" %(time() - start_time)
         if (file_count == len(samples) - 1) or (file_count == 360 - 1):
             store_preproc_video_skelet_data(video, skelet_feature, Targets.argmax(axis = 1), skelet, dest, last_data=True)
-#            dump_last_data(video, skelet_feature, Targets.argmax(axis = 1), skelet, dest)
             
     print" Processing one sample requies: %3.3f mins" %((time()- prog_start_time) / 60.)
         
         
-    
-    
-    
 
 vid, skel_fea, labl, skel = [], [], [], [] 
-#count = 1
 batch_idx = 0
 def store_preproc_video_skelet_data(video, skelet_feature, label, skelet, dest_path, last_data = False):
     global vid, skel_fea, labl, skel, batch_idx
@@ -165,26 +156,8 @@ def store_preproc_video_skelet_data(video, skelet_feature, label, skelet, dest_p
         
         print "store preproc data: " + str(file_name)
         batch_idx += 1
-#        count = 1
         vid, skel_fea, labl, skel = [], [], [], [] 
-    
-#    count += 1
         
-            
-#def dump_last_data(video, skelet_feature, label, skelet, dest_path):
-#    global vid, skel_fea, labl, skel, count, batch_idx
-#    vid = concatenate((vid, video), axis = 2)
-#    skel_fea = concatenate((skel_fea, skelet_feature), axis = 0)
-#    labl = concatenate((labl, label))
-#    skel.append(skelet)
-#    os.chdir(dest_path)
-#    file_name = "batch_" + str(batch_idx) + "_" + str(len(labl)) + ".zip"
-#    file = gzip.GzipFile(file_name, 'wb')
-#    dump((vid, skel_fea, labl, skel), file, -1)
-#    file.close()
-#    
-#    print "dump lat date : " + str(file_name)
-#    
 
 if __name__ == '__main__':
     main()

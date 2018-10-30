@@ -12,12 +12,12 @@ import sys
 import shutil
 import errno
 import gzip
+import numpy
 from time import time
 from itertools import tee, islice
 from cPickle import dump
 from glob import glob
 from random import shuffle
-from numpy import *
 from numpy.random import RandomState
 from classes import GestureSample
 from functions.preproc_functions import *
@@ -59,15 +59,15 @@ def main():
 def preprocess(samples):
     for file_count, file in enumerate(sort(samples)):
         print "This is the %d th file : " %file_count
-        ##totally 400 training samples, use 36 for training, 40 for validating
-        if file_count < 361:
+        ##totally 400 training samples, use 360 for training, 40 for validating
+        if file_count < 360:
             if pc == "linux_fancy" :
                 dest = "/home/fancywu/Desktop/GestureRecognition/Train_files/Preprocessed_files/train"
             elif pc == "win_fancy" :
                 dest =""
             print "\t Processing training file " + file
             
-        elif file_count >= 361:
+        elif file_count >= 360:
             if pc == "linux_fancy" :
                 dest = "/home/fancywu/Desktop/GestureRecognition/Train_files/Preprocessed_files/valid"
             elif pc == "win_fancy" :
@@ -82,10 +82,11 @@ def preprocess(samples):
         ##USE Ground Truth information to learn the model
         ##Get the list of gesture for this sample
         gestures = sample.getGestures()
-        print "len(gestures" + str(len(gestures))
+        print "len gestures: " + str(len(gestures))
         # preprocess each gesture 
         for gesture in gestures:
             skelet, depth, gray, user, c = sample.get_data_wudi(gesture, vid_res, NEUTRUAL_SEG_LENGTH)
+            print type(user)
             if c: print '1: corrupt'
             
             skelet_feature, Targets, c = proc_skelet_wudi(sample, used_joints, gesture, HIDDEN_STATE,
@@ -118,7 +119,6 @@ def preprocess(samples):
             
             if not gray.shape[1] == skelet_feature.shape[0] == Targets.shape[0]:
                 print "too early or too late movement, skip one"
-            print "gray.shape[1]=" , gray.shape[1]
             
             ##we just use gray and depth videos for training
             video = empty((2,) + gray.shape, dtype = "uint8")   
@@ -127,12 +127,11 @@ def preprocess(samples):
             print "finished"
             
         print "Processing one batch requires : %d seconds\n" %(time() - start_time)
-        if file_count == len(samples) - 1:
-            dump_last_data(video, skelet_feature, Targets.argmax(axis = 1), skelet, dest)
-        if file_count == 361 - 1:
-            dump_last_data(video, skelet_feature, Targets.argmax(axis = 1), skelet, dest)
+        if (file_count == len(samples) - 1) or (file_count == 360 - 1):
+            store_preproc_video_skelet_data(video, skelet_feature, Targets.argmax(axis = 1), skelet, dest, last_data=True)
+#            dump_last_data(video, skelet_feature, Targets.argmax(axis = 1), skelet, dest)
             
-        print" Processing one sample requies: %3.3f h" %((time()- prog_start_time)/3600.)
+    print" Processing one sample requies: %3.3f mins" %((time()- prog_start_time) / 60.)
         
         
     
@@ -140,51 +139,52 @@ def preprocess(samples):
     
 
 vid, skel_fea, labl, skel = [], [], [], [] 
-count = 1
+#count = 1
 batch_idx = 0
-def store_preproc_video_skelet_data(video, skelet_feature, label, skelet, dest_path):
-    global vid, skel_fea, labl, skel, count, batch_idx
+def store_preproc_video_skelet_data(video, skelet_feature, label, skelet, dest_path, last_data = False):
+    global vid, skel_fea, labl, skel, batch_idx
     if len(vid) == 0:
         vid = video
         skel_fea = skelet_feature 
         labl = label
+        skel = []
         skel.append(skelet)
-    else:
-        vid = concatenate((vid,video), axis = 2)
-        skel_fea = concatenate((skel_fea,skelet_feature), axis = 0)
-        labl = concatenate((labl,label))
+    elif not last_data:
+        vid = numpy.concatenate((vid, video), axis = 2)
+        skel_fea = numpy.concatenate((skel_fea, skelet_feature), axis = 0)
+        labl = numpy.concatenate((labl, label))
         skel.append(skelet)
 
-    if len(labl) > 1000:
+    if (len(labl) > 1000) or last_data:
         make_sure_path_exists(dest_path)
         os.chdir(dest_path)
-        file_name = "batch__" + str(batch_idx) + "_" + str(len(labl)) + ".zip"
+        file_name = "batch_" + str(batch_idx) + "_" + str(len(labl)) + ".zip"
         file = gzip.GzipFile(file_name, 'wb')
         dump((vid, skel_fea, labl, skel), file, -1)
         file.close()
         
-        print file_name
+        print "store preproc data: " + str(file_name)
         batch_idx += 1
-        count = 1
+#        count = 1
         vid, skel_fea, labl, skel = [], [], [], [] 
     
-    count += 1
+#    count += 1
         
             
-def dump_last_data(video, skelet_feature, label, skelet, dest_path):
-    global vid, skel_fea, labl, skel, count, batch_idx
-    vid = concatenate((vid,video), axis = 2)
-    skel_fea = concatenate((skel_fea,skelet_feature), axis = 0)
-    labl = concatenate((labl, label))
-    skel.append(skelet)
-    os.chdir(dest_path)
-    file_name = "batch+" + str(batch_idx) + "_" + str(len(labl)) + ".zip"
-    file = gzip.GzipFile(file_name, 'wb')
-    dump((vid, skel_fea, labl, skel), file, -1)
-    file.close()
-    
-    print file_name
-    
+#def dump_last_data(video, skelet_feature, label, skelet, dest_path):
+#    global vid, skel_fea, labl, skel, count, batch_idx
+#    vid = concatenate((vid, video), axis = 2)
+#    skel_fea = concatenate((skel_fea, skelet_feature), axis = 0)
+#    labl = concatenate((labl, label))
+#    skel.append(skelet)
+#    os.chdir(dest_path)
+#    file_name = "batch_" + str(batch_idx) + "_" + str(len(labl)) + ".zip"
+#    file = gzip.GzipFile(file_name, 'wb')
+#    dump((vid, skel_fea, labl, skel), file, -1)
+#    file.close()
+#    
+#    print "dump lat date : " + str(file_name)
+#    
 
 if __name__ == '__main__':
     main()

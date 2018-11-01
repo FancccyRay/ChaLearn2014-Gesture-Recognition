@@ -48,13 +48,13 @@ HIDDEN_STATE = 5
 
 prog_start_time = 0
 def main():
+    global prog_start_time
     prog_start_time = time()
     os.chdir(data)
     samples = glob("*")  #scan and get all samples
     print len(samples), "samples found"
     #start preprocessing
     preprocess(samples)
-#    print"whole programe time used: %3.3f h"%((time()- prog_start_time)/3600.)
 
 def preprocess(samples):
     for file_count, file in enumerate(sort(samples)):
@@ -65,33 +65,32 @@ def preprocess(samples):
                 dest = "/home/fancywu/Desktop/GestureRecognition/Train_files/Preprocessed_files/train"
             elif pc == "win_fancy" :
                 dest =""
-            print "\t Processing training file " + file
+            print "Processing training file ", file
             
         elif file_count >= 360:
             if pc == "linux_fancy" :
                 dest = "/home/fancywu/Desktop/GestureRecognition/Train_files/Preprocessed_files/valid"
             elif pc == "win_fancy" :
                 dest =""
-            print "\t Processing validating file " + file
+            print "Processing validating file ", file
         
         start_time = time()
-	    ##Create the object to access the sample
+	##Create the object to access the sample
         sample = GestureSample(os.path.join(data, file))
 #        print(os.path.join(data, file))
     
         ##USE Ground Truth information to learn the model
         ##Get the list of gesture for this sample
         gestures = sample.getGestures()
-        print "len gestures: " + str(len(gestures))
+        print "len gestures: ", len(gestures)
         # preprocess each gesture 
         for gesture in gestures:
             skelet, depth, gray, user, c = sample.get_data_wudi(gesture, vid_res, NEUTRUAL_SEG_LENGTH)
-            print type(user)
-            if c: print '1: corrupt'
+            if c: print '1: corrupt'; continue
             
             skelet_feature, Targets, c = proc_skelet_wudi(sample, used_joints, gesture, HIDDEN_STATE,
                                                               NEUTRUAL_SEG_LENGTH)
-            if c: print '2: corrupt'
+            if c: print '2: corrupt'; continue
             
             user_o = user.copy()
             user = proc_user(user)
@@ -99,10 +98,10 @@ def preprocess(samples):
             if c: print '3: corrupt'
             
             user_new, depth, c = proc_depth_wudi(depth, user, user_o, skelet, NEUTRUAL_SEG_LENGTH)
-            if c: print '4: corrupt'
+            if c: print '4: corrupt'; continue
             
             gray, c = proc_gray_wudi(gray, user, skelet, NEUTRUAL_SEG_LENGTH)
-            if c: print '5: corrupt'
+            if c: print '5: corrupt'; continue
 
             if show_depth: play_vid_wudi(depth, Targets, wait=1000 / 10, norm=False)
             if show_gray: play_vid_wudi(gray, Targets, wait=1000 / 10, norm=False)
@@ -112,23 +111,27 @@ def preprocess(samples):
             skelet = traj3D, ori, pheight
             
             assert user.dtype == gray.dtype == depth.dtype == traj3D.dtype == ori.dtype == "uint8"
-            assert gray.shape == depth.shape            
-            if not gray.shape[1] == skelet_feature.shape[0] == Targets.shape[0]:
-                print "too early or too late movement, skip one"
+            assert gray.shape == depth.shape
             
-            ##we just use gray and depth videos for training
+            if not gray.shape[1] == skelet_feature.shape[0] == Targets.shape[0]:
+                print "too early or too late movement, skip one"; continue
+            
+            ##we just use gray and depth videos for training, dont need user
             video = empty((2,) + gray.shape, dtype = "uint8")   
             video[0], video[1] = gray, depth
             store_preproc_video_skelet_data(video, skelet_feature, Targets.argmax(axis = 1), skelet, dest)
             print "finished"
-         
+            
         print "Processing one batch requires : %d seconds\n" %(time() - start_time)
         if (file_count == len(samples) - 1) or (file_count == 360 - 1):
             store_preproc_video_skelet_data(video, skelet_feature, Targets.argmax(axis = 1), skelet, dest, last_data=True)
-            
-    print" Processing one sample requies: %3.3f mins" %((time()- prog_start_time) / 60.)
+
+        print "Processing %d sample requies: %3.3f mins" %(file_count + 1, (time() - prog_start_time) / 60.)
         
         
+    
+    
+    
 
 vid, skel_fea, labl, skel = [], [], [], [] 
 batch_idx = 0
@@ -154,10 +157,9 @@ def store_preproc_video_skelet_data(video, skelet_feature, label, skelet, dest_p
         dump((vid, skel_fea, labl, skel), file, -1)
         file.close()
         
-        print "store preproc data: " + str(file_name)
+        print "store preproc data: ", file_name
         batch_idx += 1
-        vid, skel_fea, labl, skel = [], [], [], [] 
-        
+        vid, skel_fea, labl, skel = [], [], [], []  
 
 if __name__ == '__main__':
     main()

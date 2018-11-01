@@ -23,6 +23,7 @@ Step 2:Step_2_preproc_save_as_hdf5_file.py
 ----------
 save as hdf5 file to read more easily
 
+Tips: Step3,4,5 just for u to know which network performs better, u can train them all at the same time or just train a fusion network
 Step 3: Step_3_DBN_training.py
 --------
 (vedio classifier) construct a GDBN networkas and train it to test its classification quality
@@ -43,13 +44,13 @@ load dbn&3dcnn parameters trained by sub model seperately
 
 These Three Steps Can Be Done At The Same Time 
 ----
-Step6_1: Step_6_1_DBN__test_state_matrix.py
+Step6_1: Step_6_1_DBN__state_matrix.py
 train the DBN network using test set, we get the state matrix of the data 
 
-Step6_2: Step_6_2_3DCNN_test_state_matrix.py
+Step6_2: Step_6_2_3DCNN_state_matrix.py
 train the 3DCNN using test set, we get the state matrix of the data 
 
-Step6_3: Step_6_3_fusion_network_test_state_matrix.py
+Step6_3: Step_6_3_fusion_network_state_matrix.py
 train the mult-model network using test set, we get the state matrix of the data 
 
 

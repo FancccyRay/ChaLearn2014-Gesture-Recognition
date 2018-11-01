@@ -23,7 +23,7 @@ Step 2:Step_2_preproc_save_as_hdf5_file.py
 ----------
 save as hdf5 file to read more easily
 
-Tips: Step3,4,5 just for u to know which network performs better, u can train them all at the same time or just train a fusion network
+Tips: Step3,4,5 just for u to know which network performs better, u can train them all at the same time or just train a fusion network<br>
 Step 3: Step_3_DBN_training.py
 --------
 (vedio classifier) construct a GDBN networkas and train it to test its classification quality

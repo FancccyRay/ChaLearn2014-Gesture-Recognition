@@ -3,7 +3,8 @@ Take 3DCNN and DBN as sub-networks, merge two networks using late fusion algorit
 
 """<br>
 The project is copied from https://github.com/stevenwudi/chalearn2014_wudi_lio <br> 
-I met some problems when running the project, so I made some adjustment here <br>
+I met some problems when running the project, so I made some adjustment here<br>
+I programmed a simple project to test a single sample, it is  "Test_single_sample_and_show_results.py", if u met any problem, contact me by email<br>
 To be continue... <br>
 """<br>
 
@@ -41,7 +42,7 @@ modify the epoches,use according to your need
 Step5: Step_5_DBN_3DCNN_traing_fusion_net.py
 --
 video classifier using a 3DCNN and DBN, fusing the two features form submodel together, 
-load dbn&3dcnn parameters trained by sub model seperately 
+load dbn&3dcnn parameterstrained by sub model seperately 
 
 These Three Steps Can Be Done At The Same Time 
 ----

@@ -21,7 +21,7 @@ extract skeleton features & preprocess videos
 
 Step 2:Step_2_preproc_save_as_hdf5_file.py
 ----------
-save as hdf5 file to read more easily
+save as hdf5 file to read it more easily
 
 Tips: Step3,4,5 just for u to know which network performs better, u can train them all at the same time or just train a fusion network<br>
 ----
@@ -54,13 +54,18 @@ train the 3DCNN using test set, we get the state matrix of the data
 Step6_3: Step_6_3_fusion_network_state_matrix.py
 train the mult-model network using test set, we get the state matrix of the data 
 
-
-Step7: Step_7_test_result.py
+Step7: Step_7_Test_results.py
 -----
 compute the state matrix to get predicted labels,test the classification quality using 
 viterbi decoding and 
-compute the score of predicted data using Jaccard Index
+compute the average score of predicted data using Jaccard Index
 
-Step8: Step_final_visualization.py
+Step8: Step_8_final_visualization.py
 -------
 draw the error rate,confusion matrix 
+
+Test_single_sample_and_show_results.py
+-----
+compute a sampe's state matrix to get predicted labels,test the classification quality using 
+viterbi decoding and 
+compute the score of predicted data using Jaccard Index

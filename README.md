@@ -4,7 +4,7 @@ Take 3DCNN and DBN as sub-networks, merge two networks using late fusion algorit
 """<br>
 The project is copied from https://github.com/stevenwudi/chalearn2014_wudi_lio <br> 
 I met some problems when running the project, so I made some adjustment here<br>
-I programmed a simple project to test a single sample, it is  "Test_single_sample_and_show_results.py", if u met any problem, contact me by email<br>
+I programmed a simple project to test a single sample, it is  "Test_single_sample_and_show_results.py", if u met any problem, contact me by email: FancccyRay@163.com<br>
 To be continue... <br>
 """<br>
 

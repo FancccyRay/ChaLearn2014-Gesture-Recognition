@@ -7,21 +7,15 @@ from numpy.random import permutation
 from time import time
 import cv2
 
-#raw_input("Press Enter to continue...")
 
-
-
-#pc = "wudi"
-pc = "wudi_linux"
-if pc=="wudi":
-    src = r"D:\Chalearn2014\Data_processed/"
-    dst = r"J:\Chalearn2014\dummy/"
-elif pc=="wudi_linux":
-    src = '/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/ProcessData_temp/'
-    dst = '/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/hdf5Dest_140/'
-elif pc=="lio":
-    src = "/mnt/wd/chalearn/preproc/"
-
+pc = "fancy_linux"
+#pc = "fancy_win"
+if pc=="fancy_linux":
+    src = '/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/ProcessData/'
+    dst = '/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/hdf5Dest/'
+elif pc=="fancy_win":
+    src = ''
+    dst = ''
 
 def main():
     prog_start_time = time()
@@ -158,13 +152,8 @@ def load_data(path):
 
     # shuffle data
     ind = permutation(l.shape[0])
-    # ind = ind[:1000]
     vid = vid[:,:,:,:4,:,:]
     vid, skeleton_feature, lbl = vid[ind].astype("float32"), skeleton_feature[ind].astype("float32"),lbl[ind].astype("float32")
-
-    # set value
-    # x_.set_value(vid, borrow=True)
-    # y_.set_value(lbl, borrow=True)
 
     return vid, lbl, skeleton_feature
 

@@ -76,7 +76,6 @@ class GesturesRecognization(QWidget,Ui_MainWindow):
         self.LoadingLabel.setText('Loading...........')
         video_file, filetype = QFileDialog.getOpenFileName(self,  
         'choose a video', '/home/fancy/Desktop/test_videos/',"Image files (*.zip)")
-#        print video_file
         if not os.path.exists(video_file):
             self.LoadingLabel.setText('')
             msg = QtWidgets.QMessageBox.warning(self,u"Warning",u"Please check the file again,this zip file is unavailabel",
@@ -86,11 +85,8 @@ class GesturesRecognization(QWidget,Ui_MainWindow):
             
             filename = os.path.split(video_file)[1]
             matrix_file = '/home/fancy/Desktop/matrix_files/' + filename
-#            print matrix_file
             self.pred_path = '/home/fancy/Desktop/test_videos_pred' 
-#            print pred_file
             self.video_file = video_file
-#            self.pred_file = pred_file
             self.VideoLabel.setText(filename)
             
             self.predLabel(self.video_file,matrix_file, self.pred_path,filename)
@@ -140,7 +136,7 @@ class GesturesRecognization(QWidget,Ui_MainWindow):
             frames_count = numpy.array(range(startFrame, endFrame+1))
             pred_label_temp = ((gestureID-1) *STATE_NO +2) * numpy.ones(len(frames_count))
             plt.plot(frames_count, pred_label_temp, color='r', linewidth=5.0)
-#           
+          
         # plot clean path
         for i in range(len(begin_frame)):
             rames_count = numpy.array(range(begin_frame[i], end_frame[i]+1))
@@ -151,10 +147,8 @@ class GesturesRecognization(QWidget,Ui_MainWindow):
         pred=[]
         for i in range(len(begin_frame)):
             pred.append([ pred_label[i], begin_frame[i], end_frame[i]] )
-#        print len(pred)
         sample_video.exportPredictions(pred,pred_file)
 #        print"viterbi me used: %d sec"%int(time.time()-time_start)
-        
 #        del sample_video
        
         
@@ -269,43 +263,12 @@ class GesturesRecognization(QWidget,Ui_MainWindow):
     
     
     def videoShow(self):
-#        self.LoadingLabel.setText("")
-#        if self.first_load_flag:
-#            self.ImageShowLabel.setText("")
-#            self.cap.release()
-#            cv2.destroyWindow("test")
-#               
-#        gtGestures_read,predGestures_read,overlaps_no_use,= self.LoadFileData()
-#        
-#        rgbFile = os.path.join(self.samplePath, self.seqID + "_color.mp4")
-#        if not os.path.exists(rgbFile):
-#            raise Exception("Invalid sample file. RGB data is not available")
-#        self.cap = cv2.VideoCapture(rgbFile)
-#        while not self.cap.isOpened():
-#            self.cap = cv2.VideoCapture(rgbFile)
-#            cv2.waitKey(100)
-        
-#        gt_gesture_count = 0
-#        gt_begin_frame = int(gtGestures_read[gt_gesture_count][1])
-#        gt_end_frame = int(gtGestures_read[gt_gesture_count][2])
-#        
-#        pred_gesture_count = 0
-#        pred_begin_frame = int(predGestures_read[pred_gesture_count][1])
-#        pred_end_frame = int(predGestures_read[pred_gesture_count][2])
-        
-        
-#        frame_numb = int(self.cap.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT))
-#        while not self.pause_flag:
-#        for current_frame in range(frame_numb):
         ret, frame = self.cap.read()
         
         if ret:    
             frame = cv2.resize(frame, (640, 480))
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             
-#            print type(self.current_frame),type(self.gt_begin_frame),type(self.gt_end_frame)
-#            print self.current_frame,self.gt_begin_frame,self.gt_end_frame
-#            print (self.current_frame >= self.gt_begin_frame) and ( self.current_frame <= self.gt_end_frame)
             if (self.current_frame >= self.gt_begin_frame) and ( self.current_frame <= self.gt_end_frame):
                 gt_name = gesture_name[int(self.gtGestures_read[self.gt_gesture_count][0])-1]
                 cv2.putText(frame,'Truth:'+ str(self.gt_gesture_count+1) ,(10,100),cv2.FONT_HERSHEY_COMPLEX,1,(255,255,255),4)
@@ -315,7 +278,6 @@ class GesturesRecognization(QWidget,Ui_MainWindow):
                     self.gt_begin_frame = int(self.gtGestures_read[self.gt_gesture_count][1])
                     self.gt_end_frame = int(self.gtGestures_read[self.gt_gesture_count][2])
                         
-#            print (self.current_frame >= self.pred_begin_frame) and ( self.current_frame <= self.pred_end_frame)
             if (self.current_frame >= self.pred_begin_frame) and ( self.current_frame <= self.pred_end_frame):
                 pred_name = gesture_name[int(self.predGestures_read[self.pred_gesture_count][0])-1]
                 cv2.putText(frame,'Predicted:'+str(self.pred_gesture_count+1),(400,100),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,255),4)
@@ -329,14 +291,10 @@ class GesturesRecognization(QWidget,Ui_MainWindow):
             self.ImageShowLabel.setPixmap(QtGui.QPixmap.fromImage(showImage))
             
             self.current_frame += 1
-#        img = numpy.zeros((1,1,1),numpy.uint8)
-    #        cv2.imshow('test',img)
-    #        cv2.waitKey(15) 
+
         else:
             self.cap.release()
             self.timer_camera.stop()
-#        cv2.destroyWindow("test")
-#            shutil.rmtree(self.samplePath)
         
                 
         
@@ -366,13 +324,9 @@ class GesturesRecognization(QWidget,Ui_MainWindow):
         self.pred_gesture_count = 0
         self.pred_begin_frame = int(self.predGestures_read[self.pred_gesture_count][1])
         self.pred_end_frame = int(self.predGestures_read[self.pred_gesture_count][2])
-
-#        self.frame_numb = int(self.cap.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT))
             
         self.timer_camera.start(30)
-        
-#        return gtGestures_read,predGestures_read,gt_gesture_count,gt_begin_frame,\
-#                   gt_end_frame,pred_gesture_count,pred_begin_frame,pred_end_frame,frame_numb
+      
 
             
     def LoadFileData(self):

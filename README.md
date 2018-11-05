@@ -14,7 +14,8 @@ Multi-model network.
 Tools 
 ---
 Python 2.7.14<br>
-Theano 0.7.0
+Theano 0.7.0<br>
+Opencv_2_4_9
 
 Step 1:Step_1_preprocess.py 
 ----

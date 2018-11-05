@@ -34,16 +34,6 @@ from functions.train_functions import _shared, _avg, write, ndtensor, print_para
 
 
 prog_start_time = time()
-# we need to parse an absolute path for HPC to load
-#print'debug1'
-#import argparse
-
-#parser = argparse.ArgumentParser()
-#parser.add_argument('path')
-#args = parser.parse_args()
-#load_path = args.path
-#print'debug2'
-#print load_path
 ####################################################################
 ####################################################################
 print "\n%s\n\t initializing \n%s"%(('-'*30,)*2)

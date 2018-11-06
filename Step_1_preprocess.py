@@ -161,6 +161,9 @@ def store_preproc_video_skelet_data(video, skelet_feature, label, skelet, dest_p
         batch_idx += 1
         vid, skel_fea, labl, skel = [], [], [], []  
 
+    if last_data:
+	batch_idx = 0
+	
 if __name__ == '__main__':
     main()
     

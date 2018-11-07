@@ -19,6 +19,12 @@ Opencv 2.4.9<br>
 Scipy 1.0.0<br>
 Numpy 1.13.3
 
+Dataset
+----
+U can find the information of dataset from here: http://gesture.chalearn.org/2014-looking-at-people-challenge <br>
+download dataset from here: http://sunai.uoc.edu/chalearnLAP/ <br>
+since it is a competition in 2014,I can not download the validation&test data, if u have any method to get all data, tell me pleaaaaaaaase!!
+
 
 Step 1:Step_1_preprocess.py 
 ----

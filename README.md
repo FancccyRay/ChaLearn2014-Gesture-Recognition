@@ -15,7 +15,10 @@ Tools
 ---
 Python 2.7.14<br>
 Theano 0.7.0<br>
-Opencv 2.4.9
+Opencv 2.4.9<br>
+Scipy 1.0.0<br>
+Numpy 1.13.3
+
 
 Step 1:Step_1_preprocess.py 
 ----

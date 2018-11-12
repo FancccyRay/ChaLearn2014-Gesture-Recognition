@@ -1,11 +1,3 @@
-"""
-Video classifier using a 3D deep convolutional neural network
-and DBN, fusing the two result together
-Data: ChaLearn 2014 gesture challenge: gesture recognition
-original code by: Lionel Pigou
-Code modulated by: Di Wu   stevenwudi@gmail.com
-2015-06-12
-"""
 # various imports
 from cPickle import load
 from glob import glob
@@ -39,18 +31,14 @@ print "\n%s\n\t initializing \n%s"%(('-'*30,)*2)
 ####################################################################
 ####################################################################
 # source and result directory
-#pc = "wudi"
-pc = "wudi_linux"
-if pc=="wudi":
-    src = r"D:\Chalearn2014\Data_processed"
-    res_dir_ = r"D:\Chalearn2014\result"# dir of original data -- note that wudi has decompressed it!!!
-elif pc == "wudi_linux":
+#pc = "fancy_win"
+pc = "fancy_linux"
+if pc == "fancy_linux":
     src = r"/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/hdf5Dest_140/"
-    res_dir_ = r"/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/result_temp/dbn/"# dir of original data -- note that wudi has decompressed it!!!
-elif pc=="lio":
-    src = "/mnt/wd/chalearn/preproc"
-    res_dir_ = "/home/lpigou/chalearn_wudi/try"
-
+    res_dir_ = r"/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/result_temp/dbn/"# dir of original data
+elif pc=="fancy_win":
+    src = ""
+    res_dir_ = ""# dir of original data -- note that wudi has decompressed it!!!
 
 lt = localtime()
 res_dir = res_dir_+"/try/"+str(lt.tm_year)+"."+str(lt.tm_mon).zfill(2)+"." \
@@ -103,10 +91,11 @@ x_skeleton_ = _shared(empty(tr._skeleon_in_shape))
 ########sample number:39,hidden_layer_size=[2000,1000]->error rate=77.1%;[2000,2000,1000],78.4%
 
 dbn = GRBM_DBN(numpy_rng=random.RandomState(123), n_ins=891, \
-                hidden_layers_sizes=[2000,2000,1000], n_outs=101, input_x=x_skeleton, label=y )  
+                hidden_layers_sizes=[2000,2000,1000], n_outs=101, input_x=x_skeleton, label=y )
+
 # we load the pretrained DBN skeleton parameteres here, currently pretraining is done
 # unsupervisedly, we can load the supervised pretrainining parameters later
-#                
+#when u pretain the network, comment the following line
 dbn.load_params_DBN("/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/result_temp/dbn/try/63.9% 2018.05.06.19.54.43/paramsbest.zip")  
 
 

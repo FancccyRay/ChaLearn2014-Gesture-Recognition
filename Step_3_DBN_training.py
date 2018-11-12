@@ -34,11 +34,11 @@ print "\n%s\n\t initializing \n%s"%(('-'*30,)*2)
 #pc = "fancy_win"
 pc = "fancy_linux"
 if pc == "fancy_linux":
-    src = r"/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/hdf5Dest_140/"
-    res_dir_ = r"/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/result_temp/dbn/"# dir of original data
+    src = r"/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/hdf5Dest/"
+    res_dir_ = r"/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/result/dbn/"# dir of original data
 elif pc=="fancy_win":
     src = ""
-    res_dir_ = ""# dir of original data -- note that wudi has decompressed it!!!
+    res_dir_ = ""# dir of original data 
 
 lt = localtime()
 res_dir = res_dir_+"/try/"+str(lt.tm_year)+"."+str(lt.tm_mon).zfill(2)+"." \

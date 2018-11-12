@@ -40,7 +40,7 @@ pc="windows"
 if pc=="linux":
     data = "/idiap/user/dwu/chalearn/Test_video_skel"
     save_dst = "/idiap/user/dwu/chalearn/Test_DBN_state_matrix"
-    res_dir_ = "/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/result_temp/"
+    res_dir_ = "/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/result/"
 elif pc=="windows":
     data = "/idiap/user/dwu/chalearn/Test_video_skel"
     save_dst = "/idiap/user/dwu/chalearn/Test_DBN_state_matrix"

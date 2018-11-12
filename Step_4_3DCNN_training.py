@@ -1,10 +1,3 @@
-"""
-Video classifier using a 3D deep convolutional neural network
-Data: ChaLearn 2014 gesture challenge: gesture recognition
-original code by: Lionel Pigou
-Code modulated by: Di Wu   stevenwudi@gmail.com
-2015-06-12
-"""
 # various imports
 from cPickle import load
 from glob import glob
@@ -38,17 +31,14 @@ print "\n%s\n\t initializing \n%s"%(('-'*30,)*2)
 ####################################################################
 ####################################################################
 # source and result directory
-#pc = "wudi"
-pc = "wudi_linux"
-if pc=="wudi":
-    src = r"D:\Chalearn2014\Data_processed"
-    res_dir_ = r"D:\Chalearn2014\result"# dir of original data -- note that wudi has decompressed it!!!
-elif pc == "wudi_linux":
-    src = r"/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/hdf5Dest_140/"
-    res_dir_ = r"/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/result_temp/3dcnn/"# dir of original data -- note that wudi has decompressed it!!!
-elif pc=="lio":
-    src = "/mnt/wd/chalearn/preproc"
-    res_dir_ = "/home/lpigou/chalearn_wudi/try"
+#pc = "fancy_win"
+pc = "fancy_linux"
+if pc=="fancy_linux":
+    src = r"/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/hdf5Dest/"
+    res_dir_ = r"/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/result/3dcnn/"# dir of original data 
+elif pc == "fancy_win":
+    src = r""
+    res_dir_ = r""
 
 lt = localtime()
 res_dir = res_dir_+"/try/"+str(lt.tm_year)+"."+str(lt.tm_mon).zfill(2)+"." \
@@ -102,12 +92,13 @@ loader = DataLoader_with_skeleton_normalisation(src, tr.batch_size, Mean_CNN, St
 
 ####################################################################
 # 3DCNN for video module
-#################################################################### 
+####################################################################
+#if u have already trained the network before, the might pause for some reason, u can load the updated paramters 
 # we load the CNN parameteres here
-use.load = True
-load_path = '/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/result_temp/3dcnn/try/70.9% 2018.05.05.02.28.21/' 
-video_cnn = conv3d_chalearn(x, use, lr, batch, net, reg, drop, mom, tr, res_dir,load_path)
-#video_cnn = conv3d_chalearn(x, use, lr, batch, net, reg, drop, mom, tr, res_dir)
+#use.load = True
+#load_path = '/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/result_temp/3dcnn/try/70.9% 2018.05.05.02.28.21/' 
+#video_cnn = conv3d_chalearn(x, use, lr, batch, net, reg, drop, mom, tr, res_dir,load_path)
+video_cnn = conv3d_chalearn(x, use, lr, batch, net, reg, drop, mom, tr, res_dir)
 
 #####################################################################
 # fuse the ConvNet output with skeleton output  -- need to change here

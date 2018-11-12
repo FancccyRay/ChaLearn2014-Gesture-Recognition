@@ -4,8 +4,12 @@ and DBN, fusing the two result together
 Data: ChaLearn 2014 gesture challenge: gesture recognition
 original code by: Lionel Pigou
 Code modulated by: Di Wu   stevenwudi@gmail.com
-2015-06-12
 """
+
+"""
+Code modulated by fancy    fancccyray@163.com
+"""
+
 # various imports
 from cPickle import load
 from glob import glob
@@ -40,13 +44,14 @@ print "\n%s\n\t initializing \n%s"%(('-'*30,)*2)
 ####################################################################
 ####################################################################
 # source and result directory
-pc = "wudi"
-if pc=="wudi":
-    src = r"/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/hdf5Dest_140/"
-    res_dir_ = r"/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/result_temp/multi/"# dir of original data -- note that wudi has decompressed it!!!
-elif pc=="lio":
-    src = "/mnt/wd/chalearn/preproc"
-    res_dir_ = "/home/lpigou/chalearn_wudi/try"
+#pc = "fancy_win"
+pc = "fancy_linux"
+if pc=="fancy_linux":
+    src = r"/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/hdf5Dest/"
+    res_dir_ = r"/home/zhiquan/fancy/meterials/chalearn2014_fancy_data/result/multi/"# dir of original data 
+elif pc=="fancy_win":
+    src = ""
+    res_dir_ = ""
 
 lt = localtime()
 res_dir = res_dir_+"/try/"+str(lt.tm_year)+"."+str(lt.tm_mon).zfill(2)+"." \

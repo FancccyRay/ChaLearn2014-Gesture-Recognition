@@ -267,7 +267,7 @@ for epoch in xrange(tr.n_epochs):
         best_valid = valid_ce[-1][1]
 
     # epoch report
-    epoch_report(epoch, best_valid, time()-time_start, learning_rate.get_value(borrow=True),\
+    epoch_report(epoch, best_valid, time()-time_start, time()-prog_start_time, learning_rate.get_value(borrow=True),\
         train_ce[-1], valid_ce[-1], res_dir)
     # make_plot(train_ce, valid_ce)
 

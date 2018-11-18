@@ -222,12 +222,12 @@ def _batch(model, batch_size, batch, is_train=True, apply_updates=None):
 def training_report(train_ce):
     return "%5.3f %5.2f" % (train_ce[0], train_ce[1]*100.)
 
-def epoch_report(epoch, best_valid, time_used, lr, train_ce, valid_ce, res_dir):
+def epoch_report(epoch, best_valid, time_used_epoch, time_used, lr, train_ce, valid_ce, res_dir):
     result_string = """ 
-    epoch %i: %.2f m since start, LR %.2e
+    epoch %i: %.2f m each epoch, %.3f h since start, LR %.2e
     train_cost: %.3f, train_err: %.3f
     val_cost: %.3f, val_err: %.3f, best: %.3f""" % \
-    (epoch, time_used / 60., lr, 
+    (epoch, time_used_epoch / 60., time_used / 3600., lr, 
         train_ce[0], train_ce[1]*100., valid_ce[0], valid_ce[1]*100.,best_valid*100.)
 
     write(result_string, res_dir)
